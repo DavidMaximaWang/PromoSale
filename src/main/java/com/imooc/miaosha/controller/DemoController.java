@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.imooc.miaosha.domain.User;
+import com.imooc.miaosha.redis.RedisService;
 import com.imooc.miaosha.result.CodeMsg;
 import com.imooc.miaosha.result.Result;
 import com.imooc.miaosha.service.UserService;
@@ -20,6 +21,9 @@ public class DemoController {
 	
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	RedisService redisService;
 
 	@RequestMapping("/")
 	@ResponseBody
@@ -61,6 +65,13 @@ public class DemoController {
 		boolean inserted = userService.tx();
 		
 		return Result.success(inserted);
+	}
+	
+	@RequestMapping("/redis/get")
+	@ResponseBody
+	public Result<Long> redisGet() {
+		Long v1 = redisService.get("key1", Long.class);
+		return Result.success(v1);
 	}
 
 }
