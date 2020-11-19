@@ -1,5 +1,6 @@
 package com.imooc.miaosha.controller;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.slf4j.Logger;
@@ -19,7 +20,7 @@ public class LoginController {
 
 	@Autowired
 	MiaoshaUserService userService;
-	private static Logger log = LoggerFactory.getLogger(LoginController.class);
+	private static Logger log = LoggerFactory.getLogger(GoodsController.class);
 
 	@RequestMapping("/to_login")
 	public String toLogin(LoginVo loginVo) {
@@ -29,10 +30,10 @@ public class LoginController {
 
 	@RequestMapping("/do_login")
 	@ResponseBody
-	public Result<Boolean> doLogin(@Valid LoginVo loginVo) {
+	public Result<Boolean> doLogin(HttpServletResponse response, @Valid LoginVo loginVo) {
 		log.info(loginVo.toString());
 		//登陆
-		userService.login(loginVo);
+		userService.login(response, loginVo);
 		
 		return Result.success(true);
 	}

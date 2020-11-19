@@ -1,0 +1,12 @@
+package com.imooc.miaosha.redis;
+
+public class MiaoshaUserkey extends BasePrefix {
+
+	public static final int TOKEN_EXPIRE = 3600 * 24 * 2;
+
+	public MiaoshaUserkey(int expireSeconds, String prefix) {
+		super(expireSeconds, prefix);
+	}
+
+	public static MiaoshaUserkey token = new MiaoshaUserkey(TOKEN_EXPIRE, "tk");
+}
