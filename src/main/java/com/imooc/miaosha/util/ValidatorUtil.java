@@ -7,7 +7,7 @@ import com.alibaba.druid.util.StringUtils;
 
 public class ValidatorUtil {
 	
-	private static final Pattern mobile_pattern = Pattern.compile("\\d{11}");
+	private static final Pattern mobile_pattern = Pattern.compile("1\\d{10}");
 	public static boolean isMobile(String src) {
 		if (StringUtils.isEmpty(src)) {
 			return false;
