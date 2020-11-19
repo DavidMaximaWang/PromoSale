@@ -39,7 +39,10 @@ public class MiaoshaUserService {
 		}
 		MiaoshaUser user = redisService.get(MiaoshaUserkey.token, token, MiaoshaUser.class);
 		// refresh expire time
-		addCookie(response, user);
+		if (user!= null) {
+			addCookie(response, token, user);
+		}
+		
 		return user;
 	}
 
@@ -65,14 +68,14 @@ public class MiaoshaUserService {
 		}
 		// generate cookie
 		if(user != null) {
-			addCookie(response, user);
+			String token = UUIDUtil.uuid();
+			addCookie(response, token, user);
 		}
 		
 		return true;
 	}
 
-	private void addCookie(HttpServletResponse response, MiaoshaUser user) {
-		String token = UUIDUtil.uuid();
+	private void addCookie(HttpServletResponse response, String token,  MiaoshaUser user) {
 		redisService.set(MiaoshaUserkey.token, token, user);
 		Cookie cookie = new Cookie(COOKI_NAME_TOKEN, token);
 		cookie.setMaxAge(MiaoshaUserkey.token.expireSeconds());
