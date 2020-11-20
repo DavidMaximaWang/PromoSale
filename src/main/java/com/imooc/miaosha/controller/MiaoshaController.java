@@ -39,6 +39,14 @@ public class MiaoshaController {
 	@Autowired
 	MiaoshaService miaoshaService;
 
+	/**
+	 * QPS 354
+	 * 5000 *10
+	 * @param model
+	 * @param user
+	 * @param goodsId
+	 * @return
+	 */
 	@RequestMapping("/do_miaosha")
 	public String doMiaosha(Model model, MiaoshaUser user, @RequestParam("goodsId")long goodsId) {
 		//search in goods list
