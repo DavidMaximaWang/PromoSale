@@ -1,6 +1,7 @@
 package com.imooc.miaosha.result;
 
 public class CodeMsg {
+	
 	private int code;
 	private String msg;
 	
@@ -22,7 +23,9 @@ public class CodeMsg {
 	
 	//订单模块
 	
-	//
+	// miaosha modul
+	public static CodeMsg MIAOSHA_OVER = new CodeMsg(500500, "flash sale is over");
+	public static CodeMsg REPEAT_MIAOSHA = new CodeMsg(500501, "can not repeat buying");
 	
 	private CodeMsg(int code, String msg) {
 		this.code = code;
