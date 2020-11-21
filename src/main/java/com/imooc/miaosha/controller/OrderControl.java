@@ -22,63 +22,40 @@ import com.imooc.miaosha.service.MiaoshaService;
 import com.imooc.miaosha.service.MiaoshaUserService;
 import com.imooc.miaosha.service.OrderService;
 import com.imooc.miaosha.vo.GoodsVo;
+import com.imooc.miaosha.vo.OrderDetailVo;
 
 @Controller
-@RequestMapping("/miaosha")
-public class MiaoshaController {
+@RequestMapping("/order")
+public class OrderControl {
 
-	@Autowired
-	MiaoshaUserService userService;
-	
-	@Autowired
-	RedisService redisService;
-	
 	@Autowired
 	GoodsService goodsService;
 	
 	@Autowired
 	OrderService orderService;
-	
-	@Autowired
-	MiaoshaService miaoshaService;
 
 	/**
-	 * QPS: 1372
-	 * 5000 *10
-	 * GET 幂等 无论从服务端多少次 都一样 不能对服务器端产生变化
-	 * POST
-	 * @param model
-	 * @param user
-	 * @param goodsId
-	 * @return
+
 	 */
-	@RequestMapping(value="/do_miaosha", method=RequestMethod.POST)
+	@RequestMapping(value="/detail")
 	@ResponseBody
-	public Result<OrderInfo> miaosha(Model model, MiaoshaUser user, @RequestParam("goodsId")long goodsId) {
+	public Result<OrderDetailVo> miaosha(Model model, MiaoshaUser user, @RequestParam("orderId")long orderId) {
 		//search in goods list
 		if(user == null) {
-			return Result.error(CodeMsg.MOBILE_NOT_EXIST);
+			return Result.error(CodeMsg.SESSION_ERROR);
+		}
+		OrderInfo orderInfo= orderService.getOrderById(orderId);
+		if (orderInfo == null) {
+			return Result.error(CodeMsg.ORDER_NOT_EXIST);
 		}
 		
-		//check storage
-		GoodsVo goods  =  goodsService.getGoodsVoByGoodsId(goodsId);
-		int stockCount =  goods.getStockCount();
-		if (stockCount <= 0) {
-			return Result.error(CodeMsg.MIAOSHA_OVER);
-		}
-		
-		MiaoshaOrder order= orderService.getOrderByUserIdGoodsId(user.getId(), goodsId);
-		if (order != null) {
-			return Result.error(CodeMsg.REPEAT_MIAOSHA);
-		}
-		
-		//reduce stock, put order, put miaosha order
-		OrderInfo orderInfo = miaoshaService.miaosha(user, goods);
-		model.addAttribute("orderInfo", orderInfo);
-		model.addAttribute("goods", goods);
-
-		return Result.success(orderInfo);
-	}
+		long goodsId = orderInfo.getGoodsId();
+		GoodsVo goods = goodsService.getGoodsVoByGoodsId(goodsId);
 	
+		OrderDetailVo vo = new OrderDetailVo();
+		vo.setGoods(goods);
+		vo.setOrder(orderInfo);
+		return Result.success(vo);
+	}
 
 }

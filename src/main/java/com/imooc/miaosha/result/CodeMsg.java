@@ -22,7 +22,7 @@ public class CodeMsg {
 	//商品模块
 	
 	//订单模块
-	
+	public static CodeMsg ORDER_NOT_EXIST = new CodeMsg(500400, "No this order");
 	// miaosha modul
 	public static CodeMsg MIAOSHA_OVER = new CodeMsg(500500, "flash sale is over");
 	public static CodeMsg REPEAT_MIAOSHA = new CodeMsg(500501, "can not repeat buying");

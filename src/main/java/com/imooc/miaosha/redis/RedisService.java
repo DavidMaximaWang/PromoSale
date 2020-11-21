@@ -106,12 +106,29 @@ public class RedisService {
 		try {
 			jedis = jedisPool.getResource();
 
-			if (key == null || key.length() <= 0) {
-				return false;
-			}
-
 			String realKey = prefix.getPrefix() + key;
 			return jedis.exists(realKey);
+
+		} finally {
+			returnToPool(jedis);
+		}
+	}
+	/**
+	 * Delete key
+	 * 
+	 * @param prefix
+	 * @param key
+	 * @return
+	 */
+	public boolean delete(KeyPrefix prefix, String key) {
+		Jedis jedis = null;
+		try {
+			jedis = jedisPool.getResource();
+
+			
+			String realKey = prefix.getPrefix() + key;
+			long ret =  jedis.del(realKey);
+			return ret > 0;
 
 		} finally {
 			returnToPool(jedis);
