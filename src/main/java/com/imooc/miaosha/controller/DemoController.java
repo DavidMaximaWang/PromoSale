@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.imooc.miaosha.domain.User;
+import com.imooc.miaosha.rabbitmq.MQSender;
 import com.imooc.miaosha.redis.RedisService;
 import com.imooc.miaosha.redis.Userkey;
 import com.imooc.miaosha.result.CodeMsg;
@@ -25,11 +26,43 @@ public class DemoController {
 	
 	@Autowired
 	RedisService redisService;
+	
+	@Autowired
+	MQSender sender;
 
 	@RequestMapping("/")
 	@ResponseBody
 	public String sayHello() {
 		return "Hello World" + LocalDateTime.now();
+	}
+	
+	@RequestMapping("/mq/header")
+	@ResponseBody
+	public Result<String> header() {
+		sender.sendHeader("hello topic, imooc");
+		return Result.success("hello imooc");
+	}
+	
+	
+	@RequestMapping("/mq/fanout")
+	@ResponseBody
+	public Result<String> fanout() {
+		sender.sendFanout("hello topic, imooc");
+		return Result.success("hello imooc");
+	}
+	
+	@RequestMapping("/mq/topic")
+	@ResponseBody
+	public Result<String> mqTopic() {
+		sender.sendTopic("hello topic, imooc");
+		return Result.success("hello imooc");
+	}
+	
+	@RequestMapping("/mq")
+	@ResponseBody
+	public Result<String> mq() {
+		sender.send("hello imooc");
+		return Result.success("hello imooc");
 	}
 	
 	@RequestMapping("/hello")
