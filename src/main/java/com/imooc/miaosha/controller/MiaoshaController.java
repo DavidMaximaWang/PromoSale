@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.imooc.miaosha.access.AccessLimit;
 import com.imooc.miaosha.domain.MiaoshaOrder;
 import com.imooc.miaosha.domain.MiaoshaUser;
 import com.imooc.miaosha.domain.OrderInfo;
@@ -105,6 +106,7 @@ public class MiaoshaController implements InitializingBean{
 	 * @param goodsId
 	 * @return
 	 */
+
 	@RequestMapping(value="/{path}/do_miaosha", method=RequestMethod.POST)
 	@ResponseBody
 	public Result<Integer> miaosha(Model model, MiaoshaUser user, @RequestParam("goodsId")long goodsId, @PathVariable("path")String path) {
@@ -182,11 +184,14 @@ public class MiaoshaController implements InitializingBean{
 		long result = miaoshaService.getMiaoshaResult(user.getId(), goodsId);
 		return Result.success(result);
 	}
+	
+	
+	@AccessLimit(seconds=5, maxCount=5, needLogin=true)
 	@RequestMapping(value="/path", method=RequestMethod.GET)
 	@ResponseBody
 	public Result<String> getMiaoshaPath(Model model,
 			MiaoshaUser user, @RequestParam("goodsId")long goodsId,
-			@RequestParam("verifyCode") int verifyCode
+			@RequestParam(value="verifyCode") int verifyCode
 			) {
 		//search in goods list
 		if(user == null) {
