@@ -115,7 +115,7 @@ public class MiaoshaController implements InitializingBean{
 		//verify path
 		boolean check =miaoshaService.checkPath(user, goodsId, path);
 		if(!check) {
-			return Result.error(CodeMsg.REQUEST_ELLEGAL);
+			return Result.error(CodeMsg.REQUEST_ILLEGAL);
 		}
 		
 		//check stock and decrease stock first
@@ -184,12 +184,19 @@ public class MiaoshaController implements InitializingBean{
 	}
 	@RequestMapping(value="/path", method=RequestMethod.GET)
 	@ResponseBody
-	public Result<String> miaoshaPath(Model model,
-			MiaoshaUser user, @RequestParam("goodsId")long goodsId) {
+	public Result<String> getMiaoshaPath(Model model,
+			MiaoshaUser user, @RequestParam("goodsId")long goodsId,
+			@RequestParam("verifyCode") int verifyCode
+			) {
 		//search in goods list
 		if(user == null) {
 			return Result.error(CodeMsg.SESSION_ERROR);
 		}
+		
+		boolean check  = miaoshaService.checkVerifyCode(user, goodsId, verifyCode);
+		if(!check) {
+    		return Result.error(CodeMsg.REQUEST_ILLEGAL);
+    	}
 		String path = miaoshaService.createMiaoshaPath(user, goodsId);
 
 		return Result.success(path);

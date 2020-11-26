@@ -82,6 +82,7 @@ function getMiaoshaPath (){
 		type:"GET",
 		data:{
 			goodsId,
+			verifyCode:$("#verifyCode").val()
 		},
 		success:function(data){
 			if(data.code == 0){

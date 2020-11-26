@@ -81,16 +81,6 @@ public class MiaoshaService {
 		
 	}
 
-
-	public boolean checkPath(MiaoshaUser user, long goodsId, String path) {
-		if (user == null || path == null) {
-			return false;
-		}
-		String pathSaved = redisService.get(MiaoshaKey.getMiaoshaPath, ""+user.getId()+"_"+goodsId, String.class);
-		return pathSaved.equals(path);
-	}
-
-
 	public String createMiaoshaPath(MiaoshaUser user, long goodsId) {
 		String path = MD5Util.md5(UUIDUtil.uuid()+"123456");
 		redisService.set(MiaoshaKey.getMiaoshaPath, ""+user.getId()+"_"+goodsId, path);
@@ -153,6 +143,27 @@ public class MiaoshaService {
 		char op2 = ops[rdm.nextInt(3)];
 		String exp = ""+ num1 + op1 + num2 + op2 + num3;
 		return exp;
+	}
+
+
+	public boolean checkVerifyCode(MiaoshaUser user, long goodsId, int verifyCode) {
+		if(user == null || goodsId <=0) {
+			return false;
+		}
+		Integer codeOld = redisService.get(MiaoshaKey.getMiaoshaVerifyCode, user.getId()+","+goodsId, Integer.class);
+		if(codeOld == null || codeOld - verifyCode != 0 ) {
+			return false;
+		}
+		redisService.delete(MiaoshaKey.getMiaoshaVerifyCode, user.getId()+","+goodsId);
+		return true;
+	}
+	
+	public boolean checkPath(MiaoshaUser user, long goodsId, String path) {
+		if (user == null || path == null) {
+			return false;
+		}
+		String pathSaved = redisService.get(MiaoshaKey.getMiaoshaPath, ""+user.getId()+"_"+goodsId, String.class);
+		return pathSaved.equals(path);
 	}
 
 }
