@@ -1,7 +1,12 @@
 package com.imooc.miaosha.controller;
 
+import java.awt.image.BufferedImage;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -189,6 +194,27 @@ public class MiaoshaController implements InitializingBean{
 
 		return Result.success(path);
 	}
+	
+	@RequestMapping(value="/verifyCode", method=RequestMethod.GET)
+	@ResponseBody
+	public Result<String> getMiaoshaVerifyCode(HttpServletResponse response, Model model,
+			MiaoshaUser user, @RequestParam("goodsId")long goodsId) {
+		//search in goods list
+		if(user == null) {
+			return Result.error(CodeMsg.SESSION_ERROR);
+		}
+	   	try {
+    		BufferedImage image  = miaoshaService.createVerifyCode(user, goodsId);
+    		OutputStream out = response.getOutputStream();
+    		ImageIO.write(image, "JPEG", out);
+    		out.flush();
+    		out.close();
+    		return null;
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    		return Result.error(CodeMsg.MIAOSHA_FAIL);
+    	}
+    }
 
 
 }

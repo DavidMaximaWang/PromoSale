@@ -28,6 +28,7 @@ public class CodeMsg {
 	// miaosha modul
 	public static CodeMsg MIAOSHA_OVER = new CodeMsg(500500, "flash sale is over");
 	public static CodeMsg REPEAT_MIAOSHA = new CodeMsg(500501, "can not repeat buying");
+	public static CodeMsg MIAOSHA_FAIL = new CodeMsg(500502, "秒杀失败");
 	
 	private CodeMsg(int code, String msg) {
 		this.code = code;
