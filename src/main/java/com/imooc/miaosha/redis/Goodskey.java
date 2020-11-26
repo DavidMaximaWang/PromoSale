@@ -8,4 +8,5 @@ public class Goodskey extends BasePrefix {
 
 	public static Goodskey goodsList = new Goodskey(60, "gl");
 	public static KeyPrefix goodsDetail = new Goodskey(60, "gd");
+	public static KeyPrefix getMiaoshaGoodsStock = new Goodskey(0, "gs");
 }

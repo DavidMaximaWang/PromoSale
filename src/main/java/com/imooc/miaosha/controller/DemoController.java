@@ -36,34 +36,34 @@ public class DemoController {
 		return "Hello World" + LocalDateTime.now();
 	}
 	
-	@RequestMapping("/mq/header")
-	@ResponseBody
-	public Result<String> header() {
-		sender.sendHeader("hello topic, imooc");
-		return Result.success("hello imooc");
-	}
-	
-	
-	@RequestMapping("/mq/fanout")
-	@ResponseBody
-	public Result<String> fanout() {
-		sender.sendFanout("hello topic, imooc");
-		return Result.success("hello imooc");
-	}
-	
-	@RequestMapping("/mq/topic")
-	@ResponseBody
-	public Result<String> mqTopic() {
-		sender.sendTopic("hello topic, imooc");
-		return Result.success("hello imooc");
-	}
-	
-	@RequestMapping("/mq")
-	@ResponseBody
-	public Result<String> mq() {
-		sender.send("hello imooc");
-		return Result.success("hello imooc");
-	}
+//	@RequestMapping("/mq/header")
+//	@ResponseBody
+//	public Result<String> header() {
+//		sender.sendHeader("hello topic, imooc");
+//		return Result.success("hello imooc");
+//	}
+//	
+//	
+//	@RequestMapping("/mq/fanout")
+//	@ResponseBody
+//	public Result<String> fanout() {
+//		sender.sendFanout("hello topic, imooc");
+//		return Result.success("hello imooc");
+//	}
+//	
+//	@RequestMapping("/mq/topic")
+//	@ResponseBody
+//	public Result<String> mqTopic() {
+//		sender.sendTopic("hello topic, imooc");
+//		return Result.success("hello imooc");
+//	}
+//	
+//	@RequestMapping("/mq")
+//	@ResponseBody
+//	public Result<String> mq() {
+//		sender.send("hello imooc");
+//		return Result.success("hello imooc");
+//	}
 	
 	@RequestMapping("/hello")
 	@ResponseBody

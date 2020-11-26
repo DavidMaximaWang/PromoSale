@@ -68,17 +68,54 @@
 </div>
 </body>
 <script>
+function getMiaoshaResult(goodsId){
+	g_showLoading();
+	$.ajax({
+		url:"/miaosha/result",
+		type:"GET",
+		data:{
+			goodsId,
+		},
+		success:function(data){
+			if(data.code == 0){
+				var result = data.data;
+				if (result < 0) {
+					layer.msg("sorry, flash sale failed");
+				}else if (result === 0){
+					setTimeout(function(){
+						getMiaoshaResult(goodsId);
+					}, 50);
+				}else{
+					layer.confirm("Good, you get it, do you want to check the order?",  {btn:["OK","Cancel"]},
+						function(){
+							window.location.href="/order_detail.htm?orderId="+result;
+						},
+						function(){
+							layer.closeAll();
+						});
+				}
+			}else{
+				layer.msg(data.msg);
+			}
+		},
+		error:function(){
+			layer.msg("客户端请求有误");
+		}
+	});
+}
 
 function doMiaosha(){
+	var goodsId = $("#goodsId").val();
 	$.ajax({
 		url:"/miaosha/do_miaosha",
 		type:"POST",
 		data:{
-			goodsId:$("#goodsId").val(),
+			goodsId,
 		},
 		success:function(data){
 			if(data.code == 0){
-				window.location.href="/order_detail.htm?orderId="+data.data.id;
+				//window.location.href="/order_detail.htm?orderId="+data.data.id;
+				getMiaoshaResult(goodsId)
 			}else{
 				layer.msg(data.msg);
 			}

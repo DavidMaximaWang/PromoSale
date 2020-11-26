@@ -4,7 +4,6 @@ public class OrderKey extends BasePrefix{
 
 	public OrderKey(int expireSeconds, String prefix) {
 		super(expireSeconds, prefix);
-		// TODO Auto-generated constructor stub
 	}
-
+	public static OrderKey getMiaoshaOrderByUidGid = new OrderKey(0,"moug");
 }
