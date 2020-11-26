@@ -28,6 +28,8 @@ import com.imooc.miaosha.service.GoodsService;
 import com.imooc.miaosha.service.MiaoshaService;
 import com.imooc.miaosha.service.MiaoshaUserService;
 import com.imooc.miaosha.service.OrderService;
+import com.imooc.miaosha.util.MD5Util;
+import com.imooc.miaosha.util.UUIDUtil;
 import com.imooc.miaosha.vo.GoodsVo;
 
 @Controller
@@ -98,12 +100,17 @@ public class MiaoshaController implements InitializingBean{
 	 * @param goodsId
 	 * @return
 	 */
-	@RequestMapping(value="/do_miaosha", method=RequestMethod.POST)
+	@RequestMapping(value="/{path}/do_miaosha", method=RequestMethod.POST)
 	@ResponseBody
-	public Result<Integer> miaosha(Model model, MiaoshaUser user, @RequestParam("goodsId")long goodsId) {
+	public Result<Integer> miaosha(Model model, MiaoshaUser user, @RequestParam("goodsId")long goodsId, @PathVariable("path")String path) {
 		//search in goods list
 		if(user == null) {
 			return Result.error(CodeMsg.SESSION_ERROR);
+		}
+		//verify path
+		boolean check =miaoshaService.checkPath(user, goodsId, path);
+		if(!check) {
+			return Result.error(CodeMsg.REQUEST_ELLEGAL);
 		}
 		
 		//check stock and decrease stock first
@@ -170,7 +177,18 @@ public class MiaoshaController implements InitializingBean{
 		long result = miaoshaService.getMiaoshaResult(user.getId(), goodsId);
 		return Result.success(result);
 	}
- 
+	@RequestMapping(value="/path", method=RequestMethod.GET)
+	@ResponseBody
+	public Result<String> miaoshaPath(Model model,
+			MiaoshaUser user, @RequestParam("goodsId")long goodsId) {
+		//search in goods list
+		if(user == null) {
+			return Result.error(CodeMsg.SESSION_ERROR);
+		}
+		String path = miaoshaService.createMiaoshaPath(user, goodsId);
+
+		return Result.success(path);
+	}
 
 
 }
