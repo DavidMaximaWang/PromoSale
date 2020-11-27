@@ -1,27 +1,8 @@
 package com.imooc.miaosha.controller;
 
-import java.awt.image.BufferedImage;
-import java.io.OutputStream;
-import java.util.HashMap;
-import java.util.List;
-
-import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.imooc.miaosha.access.AccessLimit;
 import com.imooc.miaosha.domain.MiaoshaOrder;
 import com.imooc.miaosha.domain.MiaoshaUser;
-import com.imooc.miaosha.domain.OrderInfo;
 import com.imooc.miaosha.rabbitmq.MQSender;
 import com.imooc.miaosha.rabbitmq.MiaoshaMessage;
 import com.imooc.miaosha.redis.Goodskey;
@@ -34,13 +15,23 @@ import com.imooc.miaosha.service.GoodsService;
 import com.imooc.miaosha.service.MiaoshaService;
 import com.imooc.miaosha.service.MiaoshaUserService;
 import com.imooc.miaosha.service.OrderService;
-import com.imooc.miaosha.util.MD5Util;
-import com.imooc.miaosha.util.UUIDUtil;
 import com.imooc.miaosha.vo.GoodsVo;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.List;
 
 @Controller
 @RequestMapping("/miaosha")
-public class MiaoshaController implements InitializingBean{
+public class PromoSaleController implements InitializingBean{
 
 	@Autowired
 	MiaoshaUserService userService;
